@@ -1,0 +1,19 @@
+trigger:
+  - master
+
+pool:
+  name: Default
+  demands:
+    - Agent.Name -equals 16274D983006-1
+
+steps:
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: "$(System.DefaultWorkingDirectory)"
+      Contents: "**"
+      TargetFolder: "$(Build.ArtifactStagingDirectory)"
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      ArtifactName: "CongratsWebsiteProd"
+      publishLocation: "Container"

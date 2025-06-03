@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; 
+      script-src 'self' 'unsafe-inline' *.swcc.gov.sa; style-src 'self' 
+      *.swcc.gov.sa 'unsafe-inline'; img-src 'self' *.swcc.gov.sa  data: https:"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="https://cdnext.swcc.gov.sa/img/SWALogo/favicon.png" />
+    <title>منصة التهنئة</title>
+    <link href="assets/css/jquery-ui.css" rel="stylesheet" />
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link
+      href="assets/vendor/jquery.datatable/css/jquery.dataTables.css"
+      rel="stylesheet"
+    />
+    <link href="assets/vendor/select2/css/select2.min.css" rel="stylesheet" />
+    <link
+      href="assets/vendor/sweetalert2/css/sweetalert2.min.css"
+      rel="stylesheet"
+    />
+    <link href="assets/vendor/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link
+      href="assets/vendor/hijri-date-picker-bootstrap/css/bootstrap-datetimepicker.min.css"
+      rel="stylesheet"
+    />
+    <link href="assets/css/animate.min.css" rel="stylesheet" />
+
+    <link href="assets/vendor/envelope/css/envelope.css?v=1" rel="stylesheet" />
+
+    <link href="assets/css/site.css?v=2" rel="stylesheet" />
+    <script>
+      var baseURl = "https://localhost:44381";
+    </script>
+  </head>
+  <body class="bg-dark">
+    <div
+      id="swcc-spinner"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        z-index: 5000;
+        background: #fff;
+        padding: 24px;
+        border-radius: 17px;
+        box-shadow: 0px 2px 5px rgb(0 0 0 / 25%);
+      "
+    >
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border text-primary text-swcc-blue" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark nav-shadow-custom">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex    align-items-center " href="#">
+          <img width="150" class="d-block  mx-2" src="./assets/images/swcc-outline-logo.png" /> 
+          <span class="d-block mt-4 mx-2 px-4 py-3" style="border-right: 2px solid #fff;" >
+
+             منصة التهنئة
+          </span>
+          
+        </a>
+
+    </nav>
+
+    <style>
+      .navbar-dark {
+        background: unset !important;
+      }
+    </style>
+
+    <input type="hidden" id="hdnEventActiveExsit" />
+    <div style="margin: auto auto">
+      <div
+        class="d-flex justify-content-center align-content-center text-center"
+      >
+        <div class="row">
+          <div class="col-md-12 d-flex justify-content-center">
+            <a href="#" onclick="ShowEventTemplateModal()">
+              <div class="card shadow-lg m-3" style="width: 20rem">
+                <img
+                  class="card-img-bottom"
+                  src="images\0.jpg"
+                  alt="Card Image Down"
+                />
+                <div class="card-body">
+                  <h4 class="card-title text-swcc-classic-blue">إنشاء تهنئة</h4>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style></style>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="eventExternalModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="event-template-title" class="text-center">
+              <p id="event-external-name" class="text-swcc-classic-blue">
+                بطاقة تهنئة
+              </p>
+            </div>
+
+            <div class="div-no-data-found">
+              <div
+                class="d-flex justify-content-center align-items-center mt-5"
+              >
+                <div class="text-center">
+                  <img src="assets/images/no-data-found-icon.png" />
+                  <p>لا توجد تهنئة خارجية متاحة</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="div-select-template">
+              <form id="frm-select-event-template">
+                <div class="mb-3" style="display: none !important">
+                  <label class="form-label"
+                    >المناسبات المتاحة <span>(اجباري)</span></label
+                  >
+                  <select
+                    id="selectTemplateEventId"
+                    class="form-select"
+                  ></select>
+                </div>
+
+                <!-- <div class="mb-3">
+                  <label class="form-label">اللقب <span>(إجباري)</span></label>
+                  <select id="selectNickname" class="form-select">
+                  <option value="1">محبكم</option>
+                    <option value="2">محبتكم</option>
+                    <option value="3">ابنكم</option>
+                    <option value="4">ابنتكم</option>
+                    <option value="5">أخوكم</option>
+                    <option value="6">أختكم</option>
+                    <option value="7">زميلكم</option>
+                    <option value="8">زميلتكم</option> 
+                  </select>
+                </div> -->
+
+                <div class="mb-3">
+                  <label class="form-label">الاسم <span>(اجباري)</span></label>
+
+                  <input
+                    id="selectname"
+                    required
+                    class="form-control"
+                    placeholder="الاسم الذي سوف يتم طباعته على البطاقة"
+                  />
+                </div>
+
+                <div class="mb-3">
+                  <div class="template-images"></div>
+                </div>
+              </form>
+            </div>
+            <div class="div-select-review" style="display: none">
+              <h6 class="text-swcc-classic-blue text-center">معاينة التهنئة</h6>
+              <div class="event-template-image-container">
+                <img id="event-template-review-image" src="" alt="Snow" />
+                <!-- <div class="event-template-employee-nickname"></div> -->
+                 <div class="name-container">
+
+                   <div class="event-template-employee-name"></div>
+                   
+                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              id="btn-share"
+              style="display: none"
+              class="btn btn-primary bg-swcc-blue"
+            >
+              <i class="fa fa-share-alt"></i> مشاركة التهنئة
+            </button>
+            <a href="#" id="btn-prev" style="display: none"
+              ><i class="fa fa-arrow-right"></i> السابق</a
+            >
+            <button
+              type="button"
+              id="btn-next"
+              disabled
+              style="display: none"
+              class="btn btn-primary bg-swcc-blue"
+            >
+              التالي <i class="fa fa-arrow-left"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--<footer>
+        <div class="container">
+            <div class="row">
+                <span class="font400">&copy; Copyright 2024 - SWCC</span>
+            </div>-->
+    <!--/.column-->
+    <!--</div>
+    </footer>-->
+<!-- footer -->
+    <footer class="d-flex mx-3 justify-content-between align-items-center" style="">
+      <p class="text-white" style="">استدامة وابتكار</p>
+    <p >
+      <a class="text-white" target="_blank" style="" href="https://www.swa.gov.sa/ar/">
+        swa.gov.sa
+      </a>
+    </p>
+    </footer>
+
+    <script src="assets/js/jquery-3.6.0.js"></script>
+   
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <script src="assets/js/modernizr-2.8.3.js"></script>
+    <script src="assets/vendor/jquery.datatable/js/jquery.dataTables.js"></script>
+    <script src="assets/vendor/select2/js/select2.min.js"></script>
+    <script src="assets/vendor/sweetalert2/js/sweetalert2.min.js"></script>
+    <script src="assets/vendor/hijri-date-picker-bootstrap/js/moment-with-locales.min.js"></script>
+    <script src="assets/vendor/hijri-date-picker-bootstrap/js/moment-hijri.min.js"></script>
+    <script src="assets/vendor/hijri-date-picker-bootstrap/js/bootstrap-hijri-datetimepicker.min.js"></script>
+    <script src="assets/vendor/font-awesome/js/all.min.js"></script>
+
+    <script src="assets/vendor/sidebar/js/sidebar.js"></script>
+    <script src="assets/js/html2canvas.min.js"></script>
+    <script src="assets/js/app.js"></script>
+
+    <script>
+
+   $(document).on('input','#selectname', function(){
+    console.log(this.value?.trim() === '' || this.value?.length >= 30)
+    if(this.value?.trim() === '' || this.value?.length >= 30 ){
+      // $('#btn-next').attr('disabled', true)
+      $('#btn-next').prop('disabled', true);
+    }else{
+      $('#btn-next').prop('disabled', false)
+      // document.querySelector('#btn-next').disabled = false
+
+    }
+   })
+
+
+      $(document).on("change", "#selectNickname", function (e) {
+        e.preventDefault();
+        $(document)
+          .find(".event-template-employee-nickname")
+          .html($("#selectNickname option:selected").text());
+      });
+
+      // GetCurrentUserName();
+
+      // //$(document).on('change', '#selectTemplateEventId', function () {
+      // //    GetEventImagesByEventId($(this).val());
+      // //});
+      // function GetCurrentUserName() {
+      //   $.ajax({
+      //     url: "/AjaxServices/GetCurrentUserName",
+      //     type: "POST",
+      //     success: function (data) {
+      //       $(document)
+      //         .find(".event-template-employee-name")
+      //         .html(data.EmployeeName);
+      //     },
+      //   });
+      // }
+
+      function GetExternalEvents() {
+        let divExternalEvent = $("#selectTemplateEventId");
+        $(divExternalEvent).empty();
+        $(divExternalEvent).append('<option value="-1">--- اختر ---</option>');
+        $.ajax({
+          url: "/Events/GetExternalEvents",
+          type: "POST",
+          success: function (data) {
+            if (data.IsSuccess) {
+              $.each(data.Model, function (i, item) {
+                var option =
+                  '<option value="' +
+                  data.Model[i].Id +
+                  '">' +
+                  data.Model[i].Title +
+                  "</option>";
+                $(divExternalEvent).append(option);
+              });
+            }
+          },
+        });
+      }
+
+      // async function GetActiveExternalEvent() {
+
+      //   let div = $('#selectEventId');
+      //    let eventExternalTitle = 'تهنئة خارجية';
+      //    $(div).empty();
+      //    await $.ajax({
+      //       url: '/Events/GetActiveExternalEvent',
+      //       type: 'POST',
+      //       success: function (data) {
+      //          if (data.IsSuccess) {
+      //               eventExternalTitle = data.Model.Title;
+      //               $(document).find('#event-external-name').html(eventExternalTitle);
+      //               return true;
+      //           } else {
+      //               $(document).find('#event-external-name').html(eventExternalTitle);
+      //                return false;
+      //            }
+      //           }
+      //});
+      //  }
+
+      const imagesCount = new Array(1);
+
+      function GetEventImagesByEventId(id) {
+        var eventImages = $(".template-images");
+        console.log(id);
+        $(eventImages).empty();
+        if (id != "-1") {
+          let image =
+            '<label class="form-label">اختر القالب <span>(اجباري)</span></label>';
+          image += ' <div class="row">';
+          $.each(imagesCount, function (i, item) {
+            const col = i == 1 ? 'col-6' : 'col-6'
+            image += `<div class="${col} template-image text-center">`;
+            //image += '<div class="d-flex">';
+            image +=
+              '<img src="' +
+              `./images/${i}.jpg` +
+              '" style="width: 100%; min-height: 100%;object-fit: contain;" />';
+            //image += '<img src="' + data.Model[i].ImagePath.replace("~", baseURl) + '" style="width: 905px; min-height: 509px;object-fit: contain;" />';
+            image +=
+              '<input type="radio" name="select-template" class="m-1" value="' +
+              0 +
+              '" checked="checked" />';
+            //image += '</div>';
+            image += "</div>";
+          });
+          image += "</div>";
+          $(eventImages).append(image);
+          $(document).find("#btn-next").show();
+        }
+      }
+
+      async function GetActiveEventImagesByEventId() {
+        var eventImages = $(".template-images");
+        $(document).find("#btn-next").hide();
+        $(eventImages).empty();
+
+        var isFirstItem = 'checked="checked"';
+
+        let image =
+          '<label class="form-label">اختر القالب <span>(اجباري)</span></label>';
+        image += ' <div class="row">';
+        $.each(imagesCount, function (i, item) {
+            const col = i == 0 ? 'col-6' : 'col-6'
+          image += `<div class="${col} template-image text-center">`;
+          //image += '<div class="d-flex">';
+          image +=
+            '<img src="' +
+            `./images/${i}.jpg` +
+            '" class="select-image-template" style="width: 100%; min-height: 100%;object-fit: contain;" />';
+          image +=
+            '<input type="radio" name="select-template" class="m-1" value="' +
+            i +
+            '" ' +
+            isFirstItem +
+            "  />";
+          //image += '</div>';
+          image += "</div>";
+          isFirstItem = "";
+        });
+        image += "</div>";
+        $(eventImages).append(image);
+        $(document).find("#btn-next").show();
+      }
+
+      $(document).on("click", ".select-image-template", function () {
+        $(document)
+          .find('input[name="select-template"]')
+          .each(function () {
+            $(document).find(this).prop("checked", false);
+          });
+
+        $(this).next('input[name="select-template"]').prop("checked", true);
+      });
+
+      async function ShowEventTemplateModal() {
+      // $(document).find(".event-template-employee-nickname").html("محبكم");
+
+        GetActiveEventImagesByEventId();
+        $(document).find("#event-template-title").show();
+        $(document).find(".div-no-data-found").hide();
+        ClearEventSelectTemplateModal();
+        $("#eventExternalModal").modal("show");
+      }
+
+      function SetTextToImage() {
+        let imagePath = $(document)
+          .find('input[name="select-template"]:checked')
+          .prev("img")
+          .attr("src");
+        $("#event-template-review-image").attr("src", imagePath);
+      }
+
+      $(document).on("change", 'input[name="select-template"]', function (e) {
+        e.preventDefault();
+        let imagePath = $(this).prev("img").attr("src");
+        $("#event-template-review-image").attr("src", imagePath);
+      });
+
+      function ClearEventSelectTemplateModal() {
+        //$(document).find('input[name="select-template"]').first().prop("checked", true);
+        //$(document).find('input[name="select-template"]:first').attr('checked', true);
+        ShowFirstSection();
+      }
+
+      $(document).on("click", "#btn-prev", function (e) {
+        e.preventDefault();
+
+        ShowFirstSection();
+      });
+
+      function ShowFirstSection() {
+        $(document).find("#btn-prev").hide();
+        $(document).find("#btn-share").hide();
+        $(document).find("#btn-next").show();
+        $(".div-select-review").hide();
+        $(".div-select-template").show();
+      }
+      function ShowSecondSection() {
+        $(document).find("#btn-next").hide();
+        $(document).find("#btn-share").show();
+        $(document).find("#btn-prev").show();
+        $(document).find(".div-select-review").show();
+        $(document).find(".div-select-template").hide();
+      }
+
+      $(document).on("click", "#btn-next", function (e) {
+        e.preventDefault();
+
+        // debugger;
+        if (
+          $('input[name="select-template"]').is(":checked") &&
+          $("#selectname").val()
+        ) {
+          var UName = $("#selectname").val();
+          $(document).find(".event-template-employee-name").text(UName);
+
+          ShowSecondSection();
+          SetTextToImage();
+        } else if (!$('input[name="select-template"]').is(":checked")) {
+          ShowAlert("يجب اختيار صورة", "info", false);
+        } else if (!$("#selectname").val()) {
+          ShowAlert("يجب كتابة الاسم", "info", false);
+        }
+      });
+       
+
+
+      //write name
+      $(document).on("click", "#btn-share", function (e) {
+        e.preventDefault();
+        html2canvas(
+          document.querySelector(".event-template-image-container")
+        ).then((canvas) => {
+          canvas.toBlob(async (blob) => {
+            // Even if you want to share just one file you need to
+            // send them as an array of files.
+            const files = [new File([blob], "image.jpg", { type: blob.type })];
+            const shareData = {
+              text: $("#event-external-name").val(),
+              title: $("#event-external-name").val(),
+              files,
+            };
+            if (navigator?.canShare) {
+              try {
+                await navigator.share(shareData);
+              } catch (err) {
+                if (err.name !== "AbortError") {
+                  console.error(err.name, err.message);
+                }
+              }
+            } else {
+              console.warn("Sharing not supported", shareData);
+              const reader = new FileReader()
+              reader.onloadend = () => {
+                const aEl = document.createElement('a')
+                aEl.href= reader.result;
+                aEl.download='بطاقة تهنئة'
+                aEl.click()
+              }
+              reader.readAsDataURL(blob)
+              // alert('المتصح قديم ولايدعم خاصية المشاركة يرجى تحديث المتصفح!')
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
